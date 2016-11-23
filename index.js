@@ -7,8 +7,14 @@
 
 const config = require( './config.json' );
 const discordBot = require( './controllers/bot.controller' );
+const feedReader = require( './controllers/feed.controller' );
 
-discordBot.initBot(config.BOT_TOKEN)
-  .then( bot => {
-    discordBot.sendMessageToAllChannels( "I am here" );
+//discordBot.initBot(config.BOT_TOKEN)
+//  .then( bot => {
+//    discordBot.sendMessageToAllChannels( "I am here" );
+//  });
+
+feedReader.initFeed( config.FEED_URL )
+  .then( emitter => {
+    console.log( "done" );
   });
