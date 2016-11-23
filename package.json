@@ -1,0 +1,11 @@
+{
+  "name": "tf2-update-bot",
+  "version": "1.0.0",
+  "description": "Sends a message to Discord when TF2 updates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lana Coyote",
+  "license": "ISC"
+}
