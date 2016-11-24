@@ -1,0 +1,6 @@
+{
+  "BOT_TOKEN" : "",
+  "FEED_URL" : "http://www.teamfortress.com/rss.xml",
+  "POLL_TIME" : 900000,
+  "LOG_LEVEL" : 2
+}
