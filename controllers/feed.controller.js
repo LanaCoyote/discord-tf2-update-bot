@@ -2,7 +2,7 @@
 // Handles the RSS feed junk and provides us with an event emitter to run functions off
 //
 // Created: 11/23/16 17:53
-// Last update: 12/23/16 19:01
+// Last update: 12/23/16 20:37
 // Author: Lana
 'use strict';
 
@@ -13,7 +13,6 @@ const Promise = require( 'bluebird' );
 
 const Logger = require( '../util/logger' );
 
-var G_parser;
 var G_emitter;
 var G_lastUpdate;
 var G_url;
@@ -56,6 +55,7 @@ function getLastUpdatePermalink( url ) {
         var lastItem = this.read();
         Logger.debug( "Feed initialized starting from", lastItem.guid );
         ok( lastItem.guid );
+        cleanupReader( reader );
       });
   });
 }
@@ -71,11 +71,12 @@ function updateFeed() {
 
       reader.once( 'readable', function() {
         var lastItem = this.read();
-        if ( lastItem.guid === G_lastUpdate ) return;
-
-        Logger.info( "New post found in RSS feed:", lastItem.guid );
-        G_lastUpdate = lastItem.guid;
-        G_emitter.emit( 'newPost', lastItem );
+        if ( lastItem.guid !== G_lastUpdate ) {
+            Logger.info( "New post found in RSS feed:", lastItem.guid );
+            G_lastUpdate = lastItem.guid;
+            G_emitter.emit( 'newPost', lastItem );
+        }
+        cleanupReader( reader );
       });
 
       res.pipe( reader );
@@ -83,6 +84,14 @@ function updateFeed() {
     .on( 'error', err => {
       throw err;
     });
+}
+
+function cleanupReader( reader ) {
+  reader.once( 'finish', () => {
+    reader.removeAllListeners( 'readable' );
+  });
+
+  while ( reader.read() ) {} // flush the reader
 }
 
 module.exports = {
