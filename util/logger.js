@@ -2,7 +2,7 @@
 // Logs messages, duh
 //
 // Created: 11/23/16 17:19
-// Last update: 11/23/16 17:19
+// Last update: 11/23/16 19:39
 // Author: Lana
 'use strict'
 
@@ -21,6 +21,7 @@ function log() {
   if ( currentLogLevel < this.level ) return;
   var argv = [].slice.call( arguments ).map( message => chalk[this.color]( message ) );
   argv.unshift( chalk[this.headColor]( '[' + this.head + ']' ) );
+  argv.unshift( '[' + new Date().toLocaleTimeString() + ']' );
   console.log.apply( console, argv );
 }
 
