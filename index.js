@@ -2,8 +2,9 @@
 // Sends a message to some Discord servers whenever a TF2 update is released
 //
 // Created: 11/23/16 17:07
-// Last Update: 11/23/16 17:07
+// Last Update: 11/23/16 19:48
 // Author: Lana
+'use strict';
 
 const Promise = require( 'bluebird' );
 
@@ -22,7 +23,8 @@ Promise.join(
   .spread( function( bot, feed ) {
     feed.on( 'newPost', item => {
       if ( item.title === "Team Fortress 2 Update Released" ) {
-        discordBot.sendMessageToAllChannels( item.description );
+        let cleanMessage = item.description.replace(/<li>/g, ' - ').replace(/<.+>/g, '');
+        discordBot.sendMessageToAllChannels( cleanMessage );
       }
     });
 
