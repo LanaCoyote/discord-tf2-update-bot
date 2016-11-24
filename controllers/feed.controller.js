@@ -2,7 +2,7 @@
 // Handles the RSS feed junk and provides us with an event emitter to run functions off
 //
 // Created: 11/23/16 17:53
-// Last update: 12/23/16 17:53
+// Last update: 12/23/16 19:01
 // Author: Lana
 'use strict';
 
