@@ -5,6 +5,8 @@
 // Last Update: 11/23/16 17:07
 // Author: Lana
 
+const Promise = require( 'bluebird' );
+
 const config = require( './config.json' );
 const discordBot = require( './controllers/bot.controller' );
 const feedReader = require( './controllers/feed.controller' );
@@ -14,7 +16,17 @@ const feedReader = require( './controllers/feed.controller' );
 //    discordBot.sendMessageToAllChannels( "I am here" );
 //  });
 
-feedReader.initFeed( config.FEED_URL )
-  .then( emitter => {
-    console.log( "done" );
+Promise.join(
+    discordBot.initBot( config.BOT_TOKEN ),
+    feedReader.initFeed( config.FEED_URL ) )
+  .spread( function( bot, feed ) {
+    feed.on( 'newPost', item => {
+      if ( item.title === "Team Fortress 2 Update Released" ) {
+        discordBot.sendMessageToAllChannels( item.description );
+      }
+    });
+
+    feedReader.updateFeed();
+
+    setTimeout( feedReader.updateFeed, 10000 );
   });
